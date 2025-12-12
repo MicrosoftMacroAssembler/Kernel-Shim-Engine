@@ -26,8 +26,7 @@ Our Shims attempt to patch **after** protection is enabled, causing silent failu
 I go more in-depth about the fundamental problems of our Shims conflict with the legitimate internal KSE flow in the **source codes documentation**.  <br /><br />
 
 <img width="555" height="1509" alt="kse flow" src="https://github.com/user-attachments/assets/a1f3ad6b-0966-4801-b6d5-ae4f95b3e4d8" />
-<img width="913" height="968" alt="image" src="https://github.com/user-attachments/assets/67655583-bd48-4037-ab9c-40f95ab6a13c" />
-<img width="901" height="933" alt="image" src="https://github.com/user-attachments/assets/9c4ab669-0cc4-455b-a4f4-eac5cf96ab41" />
+<img width="1541" height="1147" alt="image" src="https://github.com/user-attachments/assets/9497b4bb-dae8-4830-9fc8-72f666b0958a" />
 
 # Conclusion
 KSE provides a **powerful** mechanism for driver shimming, but applying shims at runtime (after page protection) is broken due to **MmReplaceImportEntry failures**.  <br />
