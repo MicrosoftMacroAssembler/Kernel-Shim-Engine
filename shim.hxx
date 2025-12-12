@@ -247,9 +247,9 @@ namespace kse {
             std::uint64_t driver_section = 0;
             nt::mi_obtain_section_for_driver( &full_path, &driver_path, 0, 0, &driver_section );
             if ( !driver_section ) {
-                // This case usually happens when this function is called from a Image Callback before the Image has initialized
-                // I don't know if that is the exact reasoning but I've only encountered needing this fall case if I'm calling on a module from a Image Callback
-                // There's probably a better way to deal with this case like calling MiGenerateSystemImageNames for the proper File Name but this works fine             
+                // This fallback usually happens when this function is called from a LoadImageNotifyRoutine before the Image is initialized
+                // I don't know if that is the exact reasoning but I've only encountered needing this fallback if I'm calling on a module from a LoadImageNotifyRoutine
+                // There's probably a better way to deal with this case like calling MiGenerateSystemImageNames to resolve the proper File Name          
                 auto ps_loaded_module_list = reinterpret_cast< list_entry_t* >( nt::get_export( oxorany( "PsLoadedModuleList" ) ) );
                 if ( ps_loaded_module_list ) {
                     auto iter_ldr_entry = reinterpret_cast< kldr_data_table_entry_t* >( ps_loaded_module_list->m_flink );
@@ -308,8 +308,8 @@ namespace kse {
             resolve_entry.m_entry[ 7 ] = reinterpret_cast< std::uint64_t >( device::m_driver_object );
             resolve_entry.m_entry[ 9 ] = reinterpret_cast< std::uint64_t >( m_kse_shim );
 
-            // Calls KsepResolveShimHooks that sets m_original_function from kse_shim_t to the export of the m_function_name from kse_shim_t?
-            // This is the same sequence of events that happpen in KseDriverLoadImage (I tried my best to recreate the behaviour of it) 
+            // Calls KsepResolveShimHooks that sets m_original_function from kse_shim_t to the export of the m_function_name from kse_shim_t
+            // This is the same sequence of events that happpen in KseDriverLoadImage (I tried my best to recreate the behaviour) 
             if ( auto result = nt::ksep_resolve_applicable_shims_for_driver( &resolve_entry, 1 ) ) {
                 nt::dbg_print( oxorany( "[Shim] Could not resolve applicable shims: 0x%x\n" ), result );
                 return false;
@@ -328,7 +328,7 @@ namespace kse {
             // Not needed but I wanted it to be as accurate as possible, use Event Viewer to see the output
             nt::ksep_evnt_log_shims_applied( &driver_info, shim_list_buffer, 1 );
 
-            // IRP Callbacks (doesn't work on our Shim since we're not in SDB (Shim Database) or Registry
+            // IRP Callbacks (doesn't work on our Shim since we're not in SDB (Shim Database) or Registry)
             //auto driver_object = nt::get_driver_object_by_name( shim_driver_entry.m_driver_name );
             //if ( driver_object ) {
             //    if ( auto result = nt::kse_shim_driver_io_callbacks( driver_object, &driver_path ) ) {
