@@ -3,6 +3,7 @@
 The Kernel Shim Engine (KSE) is a Windows kernel subsystem that has existed since Windows XP. <br />
 It enables patching of driver Import Address Tables (IAT), driver callbacks, and IRP I/O packets. <br />
 My documentation provides implementation based on reverse engineering, because the documentation is near to none. <br />
+For the complete documentation and usage for KSE Shimming [Click here](../shim.hxx) <br />
 
 # What Are KSE Shims?
 KSE Shims can be applied to:
